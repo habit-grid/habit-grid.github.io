@@ -1,0 +1,17 @@
+{
+  "name": "HabitGrid | 365-Day Zero-Server Habit Tracker",
+  "short_name": "HabitGrid",
+  "description": "100% client-side GitHub-style 365-day contribution heatmap habit tracker with LocalStorage persistence and instant PNG export.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FCFBF7",
+  "theme_color": "#086288",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

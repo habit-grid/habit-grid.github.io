@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --habit-level-0: #FFEFC4;
+    --habit-level-1: #97D7FF;
+    --habit-level-2: #4D8DBA;
+    --habit-level-3: #086288;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-surface-light text-slate-900 dark:bg-surface-dark dark:text-slate-100 antialiased selection:bg-[#97D7FF]/50 selection:text-[#086288] dark:selection:bg-[#97D7FF]/30 dark:selection:text-[#FFEFC4] transition-colors duration-200;
+  }
+}
+
+/* Hide scrollbars on mobile/tablet while preserving smooth horizontal swipeability */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Minimalist glass card surface */
+.card-surface {
+  @apply bg-white/90 dark:bg-surface-dark-card/90 backdrop-blur-md border border-[#4D8DBA]/20 dark:border-[#97D7FF]/15 shadow-soft-light dark:shadow-glow-dark rounded-2xl transition-all duration-200;
+}
+
+/* Subtle varied background cell animation */
+@keyframes bgCellPulse {
+  0%, 100% {
+    opacity: 0.14;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 0.42;
+    transform: scale(1.06);
+  }
+}
+
+.bg-anim-cell {
+  animation: bgCellPulse var(--cell-duration, 5s) ease-in-out infinite;
+  animation-delay: var(--cell-delay, 0s);
+}

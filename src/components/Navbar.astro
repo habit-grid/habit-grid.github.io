@@ -1,0 +1,356 @@
+---
+import { LOCALES, getTranslations, type Locale } from '../i18n/translations';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const t = getTranslations(locale);
+const activeLocaleMeta = LOCALES.find((l) => l.code === locale) ?? LOCALES[0];
+---
+
+<header
+  role="banner"
+  class="sticky top-0 z-50 w-full backdrop-blur-xl bg-[#FCFBF7]/85 dark:bg-[#041821]/85 border-b border-[#4D8DBA]/15 dark:border-[#97D7FF]/15 transition-colors duration-200"
+>
+  <nav
+    class="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-2"
+    aria-label="Main Navigation"
+  >
+    <!-- Brand Logo (Icon-Only on Mobile/Tablet, Clean Brand Name on Desktop lg+) -->
+    <a
+      href="/"
+      class="group flex items-center gap-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4D8DBA] rounded-xl p-1"
+      aria-label={t.nav.brand}
+      title={t.nav.brand}
+    >
+      <div
+        class="w-8 h-8 rounded-lg bg-[#086288] flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform border border-[#97D7FF]/30"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          class="w-4 h-4"
+          aria-hidden="true"
+        >
+          <rect x="2" y="2" width="5.5" height="5.5" rx="1.3" fill="#FFEFC4" />
+          <rect x="9.25" y="2" width="5.5" height="5.5" rx="1.3" fill="#97D7FF" />
+          <rect x="16.5" y="2" width="5.5" height="5.5" rx="1.3" fill="#4D8DBA" />
+          <rect x="2" y="9.25" width="5.5" height="5.5" rx="1.3" fill="#97D7FF" />
+          <rect x="9.25" y="9.25" width="5.5" height="5.5" rx="1.3" fill="#FFEFC4" />
+          <rect x="16.5" y="9.25" width="5.5" height="5.5" rx="1.3" fill="#97D7FF" />
+          <rect x="2" y="16.5" width="5.5" height="5.5" rx="1.3" fill="#4D8DBA" />
+          <rect x="9.25" y="16.5" width="5.5" height="5.5" rx="1.3" fill="#97D7FF" />
+          <rect x="16.5" y="16.5" width="5.5" height="5.5" rx="1.3" fill="#FFEFC4" />
+        </svg>
+      </div>
+      <span
+        data-i18n="nav.brand"
+        class="hidden lg:inline font-display font-bold text-base tracking-tight text-[#086288] dark:text-[#FFEFC4]"
+      >
+        {t.nav.brand}
+      </span>
+    </a>
+
+    <!-- Right Controls: 7-Language Dropdown, Light/Dark Switcher, Support the Developer CTA -->
+    <div class="flex items-center gap-2">
+      <!-- 7-Language Selector Dropdown (Icon-Only on Mobile/Tablet, Badge + Label on Desktop lg+) -->
+      <div class="relative" id="lang-dropdown-root">
+        <button
+          type="button"
+          id="lang-dropdown-btn"
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-controls="lang-dropdown-menu"
+          aria-label={t.nav.languageLabel}
+          title={t.nav.languageLabel}
+          class="inline-flex items-center justify-center gap-1.5 h-9 w-9 lg:w-auto lg:px-3 rounded-xl bg-white/80 hover:bg-[#97D7FF]/25 dark:bg-[#072534] dark:hover:bg-[#086288]/60 text-[#086288] dark:text-[#97D7FF] border border-[#4D8DBA]/25 dark:border-[#97D7FF]/20 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4D8DBA]"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-4 h-4 text-[#086288] dark:text-[#97D7FF] shrink-0"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+            <path d="M2 12h20"></path>
+          </svg>
+          <span
+            id="active-lang-label"
+            class="hidden lg:inline text-xs font-semibold tracking-wide"
+          >
+            {activeLocaleMeta.badge} • {activeLocaleMeta.label}
+          </span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="hidden lg:inline w-3.5 h-3.5 text-[#4D8DBA] dark:text-[#97D7FF]"
+            aria-hidden="true"
+          >
+            <path d="m6 9 6 6 6-6"></path>
+          </svg>
+        </button>
+
+        <!-- Dropdown Menu (All 7 Languages: en, es, pt, de, fr, ja, zh) -->
+        <div
+          id="lang-dropdown-menu"
+          role="menu"
+          aria-label="Select Language"
+          aria-orientation="vertical"
+          class="hidden absolute right-0 mt-2 w-52 rounded-xl bg-white dark:bg-[#072534] shadow-xl border border-[#4D8DBA]/25 dark:border-[#97D7FF]/25 py-1.5 z-50"
+        >
+          {
+            LOCALES.map((item) => {
+              const isActive = item.code === locale;
+              return (
+                <a
+                  href={item.code === 'en' ? '/' : `/?lang=${item.code}`}
+                  data-lang-code={item.code}
+                  data-lang-label={`${item.badge} • ${item.label}`}
+                  role="menuitem"
+                  aria-label={`${item.label} (${item.badge})`}
+                  class={`lang-option-item flex items-center justify-between px-3 py-2 text-xs transition-colors ${
+                    isActive
+                      ? 'bg-[#97D7FF]/30 dark:bg-[#086288] text-[#086288] dark:text-[#FFEFC4] font-semibold'
+                      : 'text-slate-700 dark:text-slate-200 hover:bg-[#97D7FF]/15 dark:hover:bg-[#086288]/50'
+                  }`}
+                >
+                  <span class="flex items-center gap-2">
+                    <span class="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-[#97D7FF]/25 dark:bg-[#041821]/70 text-[#086288] dark:text-[#97D7FF]">
+                      {item.badge}
+                    </span>
+                    <span>{item.label}</span>
+                  </span>
+                  <span class="text-[11px] lowercase font-mono opacity-60">{item.code}</span>
+                </a>
+              );
+            })
+          }
+        </div>
+      </div>
+
+      <!-- Light/Dark Theme Switcher (Icon-Only on Mobile/Tablet, Icon + Label on Desktop lg+) -->
+      <button
+        type="button"
+        id="theme-toggle-btn"
+        aria-label={t.nav.themeToggleAria}
+        title={t.nav.themeToggleAria}
+        class="inline-flex items-center justify-center gap-1.5 h-9 w-9 lg:w-auto lg:px-3 rounded-xl bg-white/80 hover:bg-[#97D7FF]/25 dark:bg-[#072534] dark:hover:bg-[#086288]/60 text-[#086288] dark:text-[#FFEFC4] border border-[#4D8DBA]/25 dark:border-[#97D7FF]/20 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4D8DBA]"
+      >
+        <svg
+          id="theme-icon-sun"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="hidden dark:block w-4 h-4 text-[#FFEFC4] shrink-0"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2"></path>
+          <path d="M12 20v2"></path>
+          <path d="m4.93 4.93 1.41 1.41"></path>
+          <path d="m17.66 17.66 1.41 1.41"></path>
+          <path d="M2 12h2"></path>
+          <path d="M20 12h2"></path>
+          <path d="m6.34 17.66-1.41 1.41"></path>
+          <path d="m19.07 4.93-1.41 1.41"></path>
+        </svg>
+        <svg
+          id="theme-icon-moon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="block dark:hidden w-4 h-4 text-[#086288] shrink-0"
+          aria-hidden="true"
+        >
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+        </svg>
+        <span data-i18n="nav.themeDark" class="hidden lg:inline text-xs font-semibold dark:hidden">
+          {t.nav.themeDark}
+        </span>
+        <span data-i18n="nav.themeLight" class="hidden lg:dark:inline text-xs font-semibold">
+          {t.nav.themeLight}
+        </span>
+      </button>
+
+      <!-- Support the Developer CTA (BuyMeACoffee) - Icon-Only on Mobile/Tablet, Full Label on Desktop lg+ -->
+      <a
+        href="https://buymeacoffee.com/kisharadilz"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={t.nav.supportCta}
+        title={t.nav.supportCta}
+        class="inline-flex items-center justify-center gap-1.5 h-9 w-9 lg:w-auto lg:px-3.5 rounded-xl bg-[#FFEFC4] hover:bg-[#97D7FF] text-[#086288] border border-[#086288]/20 font-bold text-xs shadow-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#086288]"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-4 h-4 shrink-0"
+          aria-hidden="true"
+        >
+          <path d="M10 2v2"></path>
+          <path d="M14 2v2"></path>
+          <path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"></path>
+          <path d="M6 2v2"></path>
+        </svg>
+        <span data-i18n="nav.supportCta" class="hidden lg:inline">{t.nav.supportCta}</span>
+      </a>
+    </div>
+  </nav>
+</header>
+
+<script>
+  import { LOCALES, getTranslations, type Locale } from '../i18n/translations';
+
+  function applyLocaleToPage(code: Locale, pushUrl = false) {
+    const dict = getTranslations(code);
+    document.documentElement.lang = code;
+
+    document.title = dict.meta.title;
+    const descMeta = document.getElementById('seo-description');
+    if (descMeta) descMeta.setAttribute('content', dict.meta.description);
+
+    document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((el) => {
+      const path = el.dataset.i18n;
+      if (!path) return;
+      const [sec, key] = path.split('.');
+      const sectionObj = (dict as unknown as Record<string, Record<string, string>>)[sec];
+      if (sectionObj && sectionObj[key]) {
+        el.textContent = sectionObj[key];
+      }
+    });
+
+    const locMeta = LOCALES.find((l) => l.code === code);
+    const activeLabelEl = document.getElementById('active-lang-label');
+    if (activeLabelEl && locMeta) {
+      activeLabelEl.textContent = `${locMeta.badge} • ${locMeta.label}`;
+    }
+
+    document.querySelectorAll<HTMLAnchorElement>('.lang-option-item').forEach((item) => {
+      const isCurrent = item.dataset.langCode === code;
+      item.className = `lang-option-item flex items-center justify-between px-3 py-2 text-xs transition-colors ${
+        isCurrent
+          ? 'bg-[#97D7FF]/30 dark:bg-[#086288] text-[#086288] dark:text-[#FFEFC4] font-semibold'
+          : 'text-slate-700 dark:text-slate-200 hover:bg-[#97D7FF]/15 dark:hover:bg-[#086288]/50'
+      }`;
+    });
+
+    try {
+      localStorage.setItem('habitgrid-locale', code);
+    } catch {}
+
+    if (pushUrl && typeof window !== 'undefined') {
+      const nextUrl = code === 'en' ? '/' : `/?lang=${code}`;
+      window.history.replaceState({}, '', nextUrl);
+    }
+
+    window.dispatchEvent(new CustomEvent('habitgrid:locale-changed', { detail: code }));
+  }
+
+  function initNavbarInteractions() {
+    const themeBtn = document.getElementById('theme-toggle-btn');
+    const langBtn = document.getElementById('lang-dropdown-btn');
+    const langMenu = document.getElementById('lang-dropdown-menu');
+    const langRoot = document.getElementById('lang-dropdown-root');
+
+    const params = new URLSearchParams(window.location.search);
+    const urlLang = params.get('lang') as Locale | null;
+    const savedLang = (() => {
+      try {
+        return localStorage.getItem('habitgrid-locale') as Locale | null;
+      } catch {
+        return null;
+      }
+    })();
+
+    const validCodes = LOCALES.map((l) => l.code);
+    const initialLang =
+      urlLang && validCodes.includes(urlLang)
+        ? urlLang
+        : savedLang && validCodes.includes(savedLang)
+          ? savedLang
+          : null;
+
+    if (initialLang && initialLang !== 'en') {
+      applyLocaleToPage(initialLang, false);
+    }
+
+    if (themeBtn && !themeBtn.dataset.bound) {
+      themeBtn.dataset.bound = 'true';
+      themeBtn.addEventListener('click', () => {
+        const htmlEl = document.documentElement;
+        const isDark = htmlEl.classList.toggle('dark');
+        try {
+          localStorage.setItem('habitgrid-theme', isDark ? 'dark' : 'light');
+        } catch {}
+        window.dispatchEvent(
+          new CustomEvent('habitgrid:theme-changed', { detail: isDark ? 'dark' : 'light' })
+        );
+      });
+    }
+
+    if (langBtn && langMenu && !langBtn.dataset.bound) {
+      langBtn.dataset.bound = 'true';
+      langBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isHidden = langMenu.classList.toggle('hidden');
+        langBtn.setAttribute('aria-expanded', String(!isHidden));
+      });
+
+      document.querySelectorAll<HTMLAnchorElement>('.lang-option-item').forEach((item) => {
+        item.addEventListener('click', (e) => {
+          e.preventDefault();
+          const code = item.dataset.langCode as Locale | undefined;
+          if (code) {
+            applyLocaleToPage(code, true);
+          }
+          langMenu.classList.add('hidden');
+          langBtn.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      document.addEventListener('click', (e) => {
+        if (langRoot && !langRoot.contains(e.target as Node)) {
+          langMenu.classList.add('hidden');
+          langBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          langMenu.classList.add('hidden');
+          langBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+  }
+
+  initNavbarInteractions();
+  document.addEventListener('astro:after-swap', initNavbarInteractions);
+</script>

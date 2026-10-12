@@ -1,0 +1,199 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from './Navbar.astro';
+import HeatmapGrid from './HeatmapGrid';
+import { getTranslations, type Locale } from '../i18n/translations';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getTranslations(locale);
+
+// Varied background habit cells using the exact 4-color palette (#FFEFC4, #97D7FF, #4D8DBA, #086288)
+const palette = ['#FFEFC4', '#97D7FF', '#4D8DBA', '#086288'];
+const bgCells = Array.from({ length: 36 }, (_, i) => {
+  const col = i % 9;
+  const row = Math.floor(i / 9);
+  const left = 4 + col * 11 + ((i * 7) % 5);
+  const top = 8 + row * 24 + ((i * 13) % 9);
+  const color = palette[(i * 3 + row) % palette.length];
+  const duration = 3.5 + ((i * 11) % 5);
+  const delay = ((i * 7) % 10) * 0.45;
+  const size = i % 3 === 0 ? 18 : i % 2 === 0 ? 14 : 11;
+  return { left, top, color, duration, delay, size };
+});
+---
+
+<Layout locale={locale}>
+  <!-- Subtle Animated Varied Habit-Cell Background -->
+  <div
+    class="pointer-events-none fixed inset-0 overflow-hidden z-0"
+    aria-hidden="true"
+  >
+    {
+      bgCells.map((cell) => (
+        <span
+          class="bg-anim-cell absolute rounded-[4px] border border-[#086288]/10 dark:border-[#97D7FF]/15"
+          style={`left: ${cell.left}%; top: ${cell.top}%; width: ${cell.size}px; height: ${cell.size}px; background-color: ${cell.color}; --cell-duration: ${cell.duration}s; --cell-delay: ${cell.delay}s;`}
+        />
+      ))
+    }
+  </div>
+
+  <Navbar locale={locale} />
+
+  <main
+    id="main-content"
+    class="relative z-10 flex-1 flex flex-col justify-center max-w-6xl w-full mx-auto px-4 sm:px-6 pt-5 pb-12"
+  >
+    <!-- Ultra-Minimal Semantic Breadcrumb + Header Section -->
+    <section aria-labelledby="hero-heading" class="text-center mb-5 sm:mb-6">
+      <nav aria-label="Breadcrumb" class="inline-flex justify-center mb-2">
+        <ol
+          class="flex items-center gap-1.5 text-[11px] font-medium text-slate-400 dark:text-slate-400"
+          itemscope
+          itemtype="https://schema.org/BreadcrumbList"
+        >
+          <li
+            itemprop="itemListElement"
+            itemscope
+            itemtype="https://schema.org/ListItem"
+            class="inline-flex items-center"
+          >
+            <a
+              itemprop="item"
+              href="https://habit-grid.github.io/"
+              class="text-[#086288] dark:text-[#97D7FF] hover:underline font-semibold"
+            >
+              <span itemprop="name">Home</span>
+            </a>
+            <meta itemprop="position" content="1" />
+          </li>
+          <li aria-hidden="true" class="opacity-50">/</li>
+          <li
+            itemprop="itemListElement"
+            itemscope
+            itemtype="https://schema.org/ListItem"
+            aria-current="page"
+            class="text-slate-500 dark:text-[#FFEFC4]/80"
+          >
+            <span itemprop="name" data-i18n="nav.tagline">{t.nav.tagline}</span>
+            <meta itemprop="position" content="2" />
+          </li>
+        </ol>
+      </nav>
+
+      <h1
+        id="hero-heading"
+        class="font-display font-bold text-2xl sm:text-3xl tracking-tight text-[#086288] dark:text-[#FFEFC4]"
+      >
+        <span data-i18n="nav.brand">{t.nav.brand}</span>
+        <span class="font-normal text-[#4D8DBA] dark:text-[#97D7FF]"> — </span>
+        <span data-i18n="hero.titleHighlight" class="text-[#4D8DBA] dark:text-[#97D7FF]">
+          {t.hero.titleHighlight}
+        </span>
+      </h1>
+      <p
+        data-i18n="tracker.tooltipClickHint"
+        class="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400"
+      >
+        {t.tracker.tooltipClickHint}
+      </p>
+    </section>
+
+    <!-- Core 365-Day Heatmap Island Section -->
+    <section aria-labelledby="heatmap-heading">
+      <h2 id="heatmap-heading" class="sr-only">365-Day Habit Contribution Heatmap</h2>
+      <HeatmapGrid client:idle locale={locale} />
+    </section>
+
+    <!-- Ultra-Minimal Collapsible SEO Guide & FAQ Drawer (100% Visible DOM Parity for HowTo & FAQPage Schema) -->
+    <section
+      aria-labelledby="how-it-works-heading"
+      class="mt-10 pt-6 border-t border-[#4D8DBA]/15 dark:border-[#97D7FF]/15"
+    >
+      <details class="card-surface px-5 py-4 group">
+        <summary
+          class="cursor-pointer list-none flex items-center justify-between gap-2 text-xs sm:text-sm font-display font-bold text-[#086288] dark:text-[#FFEFC4]"
+        >
+          <h2 id="how-it-works-heading" data-i18n="seoSection.howItWorksTitle" class="inline">
+            {t.seoSection.howItWorksTitle}
+          </h2>
+          <span
+            class="text-[#4D8DBA] dark:text-[#97D7FF] transition-transform group-open:rotate-180 text-xs"
+            aria-hidden="true"
+          >
+            ▼
+          </span>
+        </summary>
+
+        <div class="mt-5 space-y-6 text-xs text-slate-600 dark:text-slate-300">
+          <!-- 3 HowTo Steps -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <article class="p-3.5 rounded-xl bg-[#FCFBF7] dark:bg-[#041821]/70 border border-[#4D8DBA]/15">
+              <h3 data-i18n="seoSection.step1Title" class="font-bold text-[#086288] dark:text-[#97D7FF] mb-1">
+                {t.seoSection.step1Title}
+              </h3>
+              <p data-i18n="seoSection.step1Desc" class="leading-relaxed">{t.seoSection.step1Desc}</p>
+            </article>
+
+            <article class="p-3.5 rounded-xl bg-[#FCFBF7] dark:bg-[#041821]/70 border border-[#4D8DBA]/15">
+              <h3 data-i18n="seoSection.step2Title" class="font-bold text-[#086288] dark:text-[#97D7FF] mb-1">
+                {t.seoSection.step2Title}
+              </h3>
+              <p data-i18n="seoSection.step2Desc" class="leading-relaxed">{t.seoSection.step2Desc}</p>
+            </article>
+
+            <article class="p-3.5 rounded-xl bg-[#FCFBF7] dark:bg-[#041821]/70 border border-[#4D8DBA]/15">
+              <h3 data-i18n="seoSection.step3Title" class="font-bold text-[#086288] dark:text-[#97D7FF] mb-1">
+                {t.seoSection.step3Title}
+              </h3>
+              <p data-i18n="seoSection.step3Desc" class="leading-relaxed">{t.seoSection.step3Desc}</p>
+            </article>
+          </div>
+
+          <!-- 3 FAQ Items -->
+          <div aria-labelledby="faq-heading" class="pt-4 border-t border-[#4D8DBA]/15 space-y-3">
+            <h2
+              id="faq-heading"
+              data-i18n="seoSection.faqTitle"
+              class="font-display font-bold text-sm text-[#086288] dark:text-[#FFEFC4]"
+            >
+              {t.seoSection.faqTitle}
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="p-3.5 rounded-xl bg-[#FCFBF7] dark:bg-[#041821]/70 border border-[#4D8DBA]/15">
+                <h3 data-i18n="seoSection.faq1Q" class="font-bold text-[#086288] dark:text-[#97D7FF] mb-1">
+                  {t.seoSection.faq1Q}
+                </h3>
+                <p data-i18n="seoSection.faq1A" class="leading-relaxed">{t.seoSection.faq1A}</p>
+              </div>
+              <div class="p-3.5 rounded-xl bg-[#FCFBF7] dark:bg-[#041821]/70 border border-[#4D8DBA]/15">
+                <h3 data-i18n="seoSection.faq2Q" class="font-bold text-[#086288] dark:text-[#97D7FF] mb-1">
+                  {t.seoSection.faq2Q}
+                </h3>
+                <p data-i18n="seoSection.faq2A" class="leading-relaxed">{t.seoSection.faq2A}</p>
+              </div>
+              <div class="p-3.5 rounded-xl bg-[#FCFBF7] dark:bg-[#041821]/70 border border-[#4D8DBA]/15">
+                <h3 data-i18n="seoSection.faq3Q" class="font-bold text-[#086288] dark:text-[#97D7FF] mb-1">
+                  {t.seoSection.faq3Q}
+                </h3>
+                <p data-i18n="seoSection.faq3A" class="leading-relaxed">{t.seoSection.faq3A}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <!-- Ultra-Minimal Footer -->
+  <footer
+    role="contentinfo"
+    class="relative z-10 py-5 text-center text-[11px] text-slate-400 dark:text-slate-500"
+  >
+    <p data-i18n="seoSection.footerPrivacyNote">{t.seoSection.footerPrivacyNote}</p>
+  </footer>
+</Layout>

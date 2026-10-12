@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://habit-grid.github.io/sitemap.xml
