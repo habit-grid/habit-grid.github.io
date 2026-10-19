@@ -9,11 +9,11 @@
 [![React](https://img.shields.io/badge/React-18.3-4D8DBA?style=for-the-badge&logo=react&logoColor=white)](https://react.dev)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 [![Privacy](https://img.shields.io/badge/Privacy-100%25_LocalStorage-10B981?style=for-the-badge)](https://habit-grid.github.io)
-[![Support Developer](https://img.shields.io/badge/Buy_Me_A_Coffee-FFEFC4?style=for-the-badge&logo=buy-me-a-coffee&logoColor=086288)](https://buymeacoffee.com/kisharadilz)
+[![Support Developer](https://img.shields.io/badge/Ko--fi-FFEFC4?style=for-the-badge&logo=ko-fi&logoColor=086288)](https://ko-fi.com/kishara)
 
 **HabitGrid** is a 100% client-side, ultra-minimal web application built with **Astro** and **React Islands** that enables users to build and visualize daily habits on a GitHub-style **365-day contribution heatmap**. All habit boards, streak calculations, and multi-year grids are persisted exclusively in the user's browser via `LocalStorage`—**zero server uploads, zero accounts, and instant high-DPI PNG export.**
 
-[Launch HabitGrid](https://habit-grid.github.io) · [Report an Issue](https://github.com/habit-grid/habit-grid.github.io/issues) · [Support the Developer](https://buymeacoffee.com/kisharadilz)
+[Launch HabitGrid](https://habit-grid.github.io) · [Report an Issue](https://github.com/habit-grid/habit-grid.github.io/issues) · [Support the Developer](https://ko-fi.com/kishara)
 
 </div>
 
@@ -164,8 +164,8 @@ HabitGrid supports 7 languages on the single canonical root URL (`https://habit-
 
 If you find **HabitGrid** helpful for building daily streaks in complete privacy, consider supporting ongoing development:
 
-<a href="https://buymeacoffee.com/kisharadilz" target="_blank" rel="noopener noreferrer">
-  <img src="https://img.shields.io/badge/Support_on-Buy_Me_a_Coffee-FFEFC4?style=for-the-badge&logo=buy-me-a-coffee&logoColor=086288" alt="Buy Me A Coffee" />
+<a href="https://ko-fi.com/kishara" target="_blank" rel="noopener noreferrer">
+  <img src="https://img.shields.io/badge/Support_on-Ko--fi-FFEFC4?style=for-the-badge&logo=ko-fi&logoColor=086288" alt="Support on Ko-fi" />
 </a>
 
 ---
